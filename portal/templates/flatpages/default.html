@@ -1,0 +1,15 @@
+{% extends "portal/base_site.html" %}
+{% load markdown_deux_tags %}
+{% block title %} {{ flatpage.title }} {% endblock title %}
+
+{% block top_navigation %}
+	<div class="top_nav">
+	  {% include "portal/other_top_navigation.html" %}
+	</div>
+{% endblock top_navigation %}
+
+{% block content %}
+  <div class="right_col" role="main">
+	{{ flatpage.content|markdown }}
+  </div>
+{% endblock content %}
