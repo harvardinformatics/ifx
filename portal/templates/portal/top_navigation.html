@@ -25,13 +25,22 @@
         </ul>
       </li>
       {% endif %}
-
-       <li role="presentation" class="dropdown">
-        <a href="/slurm" class="info-number" aria-expanded="false">
-          <img src="/static/images/slurm-logo.png" width="50px"/>
-          <span class="badge bg-red">10,236</span>
+      {% if not request.user.is_authenticated %}
+       <li>
+        <a href="/login/" title="Login" aria-expanded="false">
+          <img src="/static/images/login.png" width="30px"/>
         </a>
       </li>
-    </ul>
+      {% endif %}
+      <li>
+        <a href="/odyssey/" title="Slurm jobs" class="info-number" aria-expanded="false">
+          <img src="/static/images/slurm-logo.png" width="50px"/>
+          <span id="odyssey-badge" class="badge bg-red">0</span>
+        </a>
+      </li>
+     </ul>
   </nav>
 </div>
+{% block javascripts %}
+
+{% endblock javascripts %}

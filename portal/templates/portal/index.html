@@ -18,10 +18,10 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h1>ifx.rc <span class="subtitle">the FAS Informatics application server</span></h1>
+            <h1>ifx.rc <span class="subtitle hidden-sm hidden-xs">the FAS Informatics application server</span></h1>
             <div class="clearfix"></div>
           </div>
-          <div class="x_content">
+          <div class="x_content hidden-sm hidden-xs">
             <div class="dashboard-widget-content">
               <h2>Welcome to ifx.rc, the entry point for an assortment of applications provided by <a href="http://informatics.fas.harvard.edu">the FAS Informatics group</a></h2>
               <h2>Use your HarvardKey to access any of the applications linked on the sidebar.</h2>
@@ -69,7 +69,7 @@
           <!-- Start to do list -->
             <div class="x_panel">
               <div class="x_title">
-                <h2>Top Odyssey applications (last 30 days)</h2>
+                <h2>Top Odyssey applications (last 7 days)</h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -80,7 +80,7 @@
               </div>
               <div class="x_content">
                 <div class="">
-                  <table id="module-list-table" class="table clean-table dt-responsive nowrap" cellspacing="0" width="100%">
+                  <table id="module-list-table" class="table dt-responsive nowrap" cellspacing="0" width="100%">
                     <thead>
                       <tr>
                         <th>Module name</th>
@@ -88,14 +88,6 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>python/2.7.11-fasrc01</td>
-                        <td>30,897</td>
-                       </tr>
-                      <tr>
-                        <td>R/3.3.4-fasrc01</td>
-                        <td>29,785</td>
-                       </tr>
                     </tbody>
                   </table>
                 </div>
@@ -110,13 +102,6 @@
 
 {% block javascripts %}
   {{ block.super}}
-  <!-- Chart.js -->
-  <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
-  <!-- gauge.js -->
-  <script src="/static/vendors/gauge.js/dist/gauge.min.js"></script>
-  <!-- Skycons -->
-  <script src="/static/vendors/skycons/skycons.js"></script>
-  <!-- DateJS -->
   <script src="/static/vendors/DateJS/build/date.js"></script>
   <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
   <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
@@ -130,7 +115,31 @@
   <script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
   <script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
   <script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-  <script src="/static/vendors/jszip/dist/jszip.min.js"></script>
-  <script src="/static/vendors/pdfmake/build/pdfmake.min.js"></script>
-  <script src="/static/vendors/pdfmake/build/vfs_fonts.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      /** Data table setup **/
+      $("#module-list-table").DataTable({
+//          "search" : {'search' : '*'},
+//          "searchDelay" : null,
+          "ajax" : {
+              "url" : PORTAL_URL + "apps/modules/api",
+              "type" : "POST",
+              "data" : {
+                "sDate" : Date.today().add(-7).days().toString('yyyy-MM-dd'),
+                "eDate" : Date.today().toString('yyyy-MM-dd'),
+                "length" : "50",
+                "start" : "0",
+                "raw" : "no"
+              }
+          },
+          "order" : [], 
+          "lengthMenu" : [[10, 25, 50, -1], [10, 25, 50, "All"]],
+          "dom"  : "t",
+          "columns" : [
+              {"title" : "Module name", "data" : "text"},
+              {"title" : "Module load count", "data" : "size"},
+          ],
+      });
+    })
+  </script>
 {% endblock javascripts %}

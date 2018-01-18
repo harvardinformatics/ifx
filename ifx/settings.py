@@ -126,3 +126,5 @@ SITE_ID = 2
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+PORTAL_URL = "https://portal.rc.fas.harvard.edu/"

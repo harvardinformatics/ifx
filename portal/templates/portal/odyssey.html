@@ -1,0 +1,103 @@
+{% extends "portal/base_site.html" %}
+
+{% block title %} Home {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Current Odyssey Jobs</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <div class="dashboard-widget-content">
+              <div id="last-update-date-div">
+                  <span style="font-weight: bold">Last squeue update</span> <span id="last-update-date">{{lastupdate}}</span> <span id="table-refresh" ></span>
+              </div>
+              <div class="joblist-container">
+                <table id="joblist-table" class="table dt-responsive nowrap" cellspacing="0" width="100%">
+                  <thead>
+                    <tr>
+                      <th>Job ID</th>
+                      <th>Job Name</th>
+                      <th>Partition</th>
+                      <th>State</th>
+                      <th>Submit Time</th>
+                      <th>Start Time</th>
+                      <th>End Time</th>
+                      <th>Command</th>
+                      <th>Node List (Reason)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+  <script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+  <script src="/static/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+  <script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+  <script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+  <script type="text/javascript">
+    (function($) {
+        $(document).ready(function(){
+            console.log("Setting up joblist table");
+            var table = $("#joblist-table").DataTable({
+    /*            "oSearch" : {"sSearch": getParameterByName('search')}, */
+                "dom"  : "lifrtp",
+                "ajax" : PORTAL_URL + "jobs/api?username=cgorgulla",
+                "columns" : [
+                    {"title" : "Job Id",      "data" : "jobid"},
+                    {"title" : "Job Name",    "data" : "name",      "render" : clipcell},
+                    {"title" : "Partition",   "data" : "partition"},
+                    {"title" : "State",       "data" : "state"},
+                    {"title" : "Command",     "data" : "command",   "render" : clipcell},
+                    {"title" : "Node List (Reason)",  "data" : "nodelistreason"},
+                    {"title" : "Submit Time", "data" : "submit_time"},
+                    {"title" : "Start Time",  "data" : "start_time"},
+                    {"title" : "End Time",    "data" : "end_time"},
+                ],
+                "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]        });
+            
+            $(".dataTables_filter").css({"float":"right","margin-right" : "2em", "margin-bottom" : "0.5em"});
+
+           //Reload the table and get the most recent table update date
+            setInterval( function () { 
+                table.ajax.reload();
+            }, 10000 );
+
+
+        });
+     })(jQuery);
+  </script>
+{% endblock javascripts %}
