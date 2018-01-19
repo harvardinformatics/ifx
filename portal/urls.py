@@ -6,8 +6,10 @@ urlpatterns = [
     # Matches any html file - to be used for gentella
     # Avoid using your .html in your resources.
     # Or create a separate django app.
-    url(r'^odyssey/?', views.odyssey, name="odyssey"),
-    url(r'^.*\.html', views.gentella_html, name="gentella"),
+    url(r'^odyssey/', views.odyssey, name="odyssey"),
+    url(r'^notices/new/', views.edit_notice, name="new_notice"),
+    url(r'^notices/$', views.notices, name="notices"),
+    url(r'^example.*\.html', views.gentella_html, name="gentella"),
 
     # The home page
     url(r'^$', views.index, name="index"),

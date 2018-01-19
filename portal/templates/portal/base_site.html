@@ -1,3 +1,5 @@
+{% load gravatar %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -50,7 +52,49 @@
 
           {% block top_navigation %}
             <div class="top_nav">
-              {% include "portal/top_navigation.html" %}
+              <div class="nav_menu">
+                <nav>
+                  <div class="nav toggle">
+                    <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                  </div>
+                  {% block app_nav %}
+                  {% endblock app_nav %}
+                  <ul class="nav navbar-nav navbar-right">
+                    {% if request.user.is_authenticated %} 
+                    <li class="">
+                      <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        {% gravatar request.user.email 150 %} {{request.user.username}}
+                        <span class=" fa fa-angle-down"></span>
+                      </a>
+                      <ul class="dropdown-menu dropdown-usermenu pull-right">
+                        <li><a href="javascript:;"> Profile</a></li>
+                        <li>
+                          <a href="javascript:;">
+                            <span class="badge bg-red pull-right">50%</span>
+                            <span>Settings</span>
+                          </a>
+                        </li>
+                        <li><a href="javascript:;">Help</a></li>
+                        <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                      </ul>
+                    </li>
+                    {% endif %}
+                    {% if not request.user.is_authenticated %}
+                     <li>
+                      <a href="/login/" title="Login" aria-expanded="false">
+                        <img src="/static/images/login.png" width="30px"/>
+                      </a>
+                    </li>
+                    {% endif %}
+                    <li>
+                      <a href="/odyssey/" title="Slurm jobs" class="info-number" aria-expanded="false">
+                        <img src="/static/images/slurm-logo.png" width="50px"/>
+                        <span id="odyssey-badge" class="badge bg-red">0</span>
+                      </a>
+                    </li>
+                   </ul>
+                </nav>
+              </div>
             </div>
           {% endblock top_navigation %}
 

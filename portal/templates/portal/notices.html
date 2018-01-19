@@ -1,0 +1,63 @@
+{% extends "portal/base_site.html" %}
+<!--
+Page for displaying a list of Notices, most recent first
+-->
+{% load markdown_deux_tags %}
+
+{% block title %} Notices {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block app_nav %}
+<ul class="nav navbar-nav navbar-left">
+   <li>
+    <a href="{% url 'new_notice' %}" title="New Notice" aria-expanded="false">
+      New Notice
+    </a>
+  </li>
+</ul>
+{% endblock app_nav %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% for notice in notices %}
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>{{notice.author}} Created: {{notice.created}}, Updated: {{notice.updated}}</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li><a href=""><i class="fa pencil-square-o"></i></a>
+                  </li>
+                  <li><a href=""><i class="fa trash-o"></i></a>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="dashboard-widget-content">
+                <p>{{notice.content|markdown}}</p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div> 
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+{% endblock javascripts %}
