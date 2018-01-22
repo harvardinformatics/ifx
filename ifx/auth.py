@@ -2,6 +2,7 @@ from django.contrib import auth
 from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.exceptions import ImproperlyConfigured
 from rc.ad import Connection
+from rc.ad import user as ADUser
 import logging
 
 
@@ -24,7 +25,13 @@ def updateUserInfo(user):
                 user.first_name = us[0][1]["givenName"][0]
             if "sn" in us[0][1]:
                 user.last_name = us[0][1]["sn"][0]
+
+            # If the user is rc_admin or informatics, they are an admin here
+            if ADUser.hasGroups(conn, user.username, ["rc_admin","informatics"]):
+                user.is_superuser = True
+
             user.save()
+
     except Exception as e:
         logger.error("Unable to update user information from AD: %s" % str(e))
  

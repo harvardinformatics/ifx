@@ -64,11 +64,14 @@
                     {% if request.user.is_authenticated %} 
                     <li class="">
                       <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        {% gravatar request.user.email 150 %} 
+                        {% gravatar request.user.email 150 %}
                         {% if request.user.first_name %}
-                          {{request.user.first_name}} {{request.user.last_name}}
+                          Hi, {{request.user.first_name}}
                         {% else %}
                           {{request.user.username}}
+                        {% endif %}
+                        {% if request.user.is_superuser %}
+                          <sup><span id="su-badge" class="badge bg-red hidden-xs" title="Super user">su</span></sup>
                         {% endif %}
                         <span class=" fa fa-angle-down"></span>
                       </a>
@@ -85,7 +88,7 @@
                     </li>
                     {% endif %}
                     <li>
-                      <a href="/odyssey/" title="Slurm jobs" class="info-number" aria-expanded="false">
+                      <a href="/odyssey/" title="Slurm jobs" class="info-number hidden-xs" aria-expanded="false">
                         <img src="/static/images/slurm-logo.png" width="50px"/>
                         <span id="odyssey-badge" class="badge bg-red">0</span>
                       </a>
