@@ -1929,9 +1929,10 @@ $(document).ready(function() {
     init_autosize();
     init_autocomplete();
 
-    getJobCount('');
+    //Hopefully, username was set in a template
+    getJobCount(username);
     setInterval( function () { 
-        getJobCount("cgorgulla");
+        getJobCount(username);
     }, 5000 );
 
 });

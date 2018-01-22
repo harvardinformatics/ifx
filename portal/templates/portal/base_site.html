@@ -35,6 +35,7 @@
     
       <script type="text/javascript">
         var PORTAL_URL = "https://portal.rc.fas.harvard.edu/";
+        var username = "{{request.user.username}}";
       </script>
     {% endblock head %}
   </head>
@@ -63,19 +64,16 @@
                     {% if request.user.is_authenticated %} 
                     <li class="">
                       <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        {% gravatar request.user.email 150 %} {{request.user.username}}
+                        {% gravatar request.user.email 150 %} 
+                        {% if request.user.first_name %}
+                          {{request.user.first_name}} {{request.user.last_name}}
+                        {% else %}
+                          {{request.user.username}}
+                        {% endif %}
                         <span class=" fa fa-angle-down"></span>
                       </a>
                       <ul class="dropdown-menu dropdown-usermenu pull-right">
                         <li><a href="javascript:;"> Profile</a></li>
-                        <li>
-                          <a href="javascript:;">
-                            <span class="badge bg-red pull-right">50%</span>
-                            <span>Settings</span>
-                          </a>
-                        </li>
-                        <li><a href="javascript:;">Help</a></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                       </ul>
                     </li>
                     {% endif %}
@@ -116,7 +114,7 @@
         <!-- Bootstrap -->
         <script src="/static/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
         <!-- FastClick -->
-        <script src="/static/vendors/fastclick/lib/fastclick.js"></script>
+        <script src="/static/vendors/fastclick/fastclick.js"></script>
         <!-- NProgress -->
         <script src="/static/vendors/nprogress/nprogress.js"></script>
         <!-- bootstrap-progressbar -->

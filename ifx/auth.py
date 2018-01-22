@@ -1,7 +1,33 @@
 from django.contrib import auth
-from django.contrib.auth import RemoteUserMiddleware
+from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.exceptions import ImproperlyConfigured
+from rc.ad import Connection
+import logging
 
+
+logger = logging.getLogger("ifx")
+
+
+def updateUserInfo(user):
+    """
+    Fetch data from AD and update local bits
+    """
+    logger.debug("Searching AD...")
+    try:
+        conn = Connection()
+        us = conn.search(sAMAccountName=user.username)
+        if len(us) > 0:
+            logger.debug("Found AD user.  Updating settings")
+            if "mail" in us[0][1]:
+                user.email = us[0][1]["mail"][0]
+            if "givenName" in us[0][1]:
+                user.first_name = us[0][1]["givenName"][0]
+            if "sn" in us[0][1]:
+                user.last_name = us[0][1]["sn"][0]
+            user.save()
+    except Exception as e:
+        logger.error("Unable to update user information from AD: %s" % str(e))
+ 
 
 class RemoteUserPlusMiddleware(RemoteUserMiddleware):
     """
@@ -21,7 +47,7 @@ class RemoteUserPlusMiddleware(RemoteUserMiddleware):
     # Name of request header to grab username from.  This will be the key as
     # used in the request.META dictionary, i.e. the normalization of headers to
     # all uppercase and the addition of "HTTP_" prefix apply.
-    header = "REMOTE_USER"
+    header = "HTTP_REMOTE_USER"
     force_logout_if_no_header = True
 
     def process_request(self, request):
@@ -34,17 +60,20 @@ class RemoteUserPlusMiddleware(RemoteUserMiddleware):
                 " 'django.contrib.auth.middleware.AuthenticationMiddleware'"
                 " before the RemoteUserMiddleware class.")
         try:
+            logger.debug("Checking header for REMOTE_USER")
             username = request.META[self.header]
         except KeyError:
             # If specified header doesn't exist then remove any existing
             # authenticated remote-user, or return (leaving request.user set to
             # AnonymousUser by the AuthenticationMiddleware).
+            logger.debug("Key error in check for header.  META headers are %s" % "\n".join(request.META.keys()))
             if self.force_logout_if_no_header and request.user.is_authenticated:
                 self._remove_invalid_user(request)
             return
         # If the user is already authenticated and that user is the user we are
         # getting passed in the headers, then the correct user is already
         # persisted in the session and we don't need to continue.
+        logger.debug("Checking for authenticated user")
         if request.user.is_authenticated:
             if request.user.get_username() == self.clean_username(username, request):
                 return
@@ -55,11 +84,14 @@ class RemoteUserPlusMiddleware(RemoteUserMiddleware):
 
         # We are seeing this user for the first time in this session, attempt
         # to authenticate the user.
-        user = auth.authenticate(request, remote_user=username)
+        logger.debug("User not authenticated.  Trying...")
+        user = auth.authenticate(remote_user=username)
         if user:
+            logger.debug("User is valid")
             # User is valid.  Set request.user and persist user in the session
             # by logging the user in.
             request.user = user
             auth.login(request, user)
             
+            updateUserInfo(user)
 
