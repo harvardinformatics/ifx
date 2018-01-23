@@ -170,3 +170,6 @@ LOGGING = {
 }
 
 PORTAL_URL = "https://portal.rc.fas.harvard.edu/"
+
+# Used by ifx.auth to determine is_superuser flag
+AD_ADMIN_GROUPS = ["rc_admin", "informatics"]

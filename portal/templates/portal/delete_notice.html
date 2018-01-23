@@ -25,47 +25,45 @@ Page for editing a Notice
     <!-- top tiles -->
     <div class="row">
         <div class="col-md-12">
+          {% if error_message %}
+            <div class="error_message">{{error_message}}</div>
+          {% endif %}
           <div class="x_panel">
             <div class="x_title">
-              <h2>Edit Notice</h2>
+              <h2>Delete Notice</h2>
               <div class="clearfix"></div>
             </div>
             <div class="x_content">
               <br />
               <form class="form-horizontal form-label-left" action="" method="post">{% csrf_token %}
-                <div class="form-group">
+               <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">Title</label>
                   <div class="col-md-9 col-sm-9 col-xs-12 dashboard-widget-content">
-                    {{form.title}}
+                    {{notice.title}}
                   </div>
-                  <div class="alert">{{form.title.errors}}</div>
                 </div>
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">Notice</label>
                   <div class="col-md-9 col-sm-9 col-xs-12 dashboard-widget-content">
-                    {{form.content}}
+                    {{notice.content|markdown}}
                   </div>
-                  <div class="alert">{{form.content.errors}}</div>
                 </div>
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">Excerpt</label>
                   <div class="col-md-9 col-sm-9 col-xs-12 dashboard-widget-content">
-                    {{form.excerpt}}
+                    {{notice.excerpt|markdown}}
                   </div>
-                  <div class="alert">{{form.excerpt.errors}}</div>
                 </div>
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">Author</label>
                   <div class="col-md-9 col-sm-9 col-xs-12 dashboard-widget-content">
-                    {{form.author}}
+                    {{notice.author}}
                   </div>
-                  <div class="alert">{{form.author.errors}}</div>
                 </div>
                 <div class="ln_solid"></div>
                 <div class="form-group">
                   <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                    <button type="reset" class="btn btn-primary">Reset</button>
-                    <button type="submit" class="btn btn-success">Submit</button>
+                    <button type="submit" class="btn btn-success">Delete?</button>
                   </div>
                 </div>
 

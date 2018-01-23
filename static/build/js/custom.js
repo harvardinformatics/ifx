@@ -57,7 +57,7 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
 // clipcell for JQuery DataTables
 // Creates a text span that is clipped to maxlen chars.  The title attribute has the whole 
 // thing so that mouse over shows it
-var clipcell = function(data, type, row, meta, maxlen = 15){
+var clipcell = function(data, type, row, meta, maxlen = 30){
     if (type == 'display' && data.length > maxlen){
         return '<span title="'+data+'">...'+data.substr( data.length - maxlen, data.length )+'</span>'
     }
@@ -1930,9 +1930,9 @@ $(document).ready(function() {
     init_autocomplete();
 
     //Hopefully, username was set in a template
-    getJobCount(username);
+    getJobCount(USERNAME);
     setInterval( function () { 
-        getJobCount(username);
+        getJobCount(USERNAME);
     }, 5000 );
 
 });

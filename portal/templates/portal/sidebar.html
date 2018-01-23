@@ -1,6 +1,6 @@
 <div class="left_col scroll-view">
   <div class="navbar nav_title" style="border: 0;">
-    <a href="/index.html" class="site_title"><img src="/static/images/informatics-logo-icon-inverted.png"/><span>ifx.rc</span></a>
+    <a href="/" class="site_title"><img src="/static/images/informatics-logo-icon-inverted.png"/><span>ifx.rc</span></a>
   </div>
 
   <div class="clearfix"></div>
@@ -17,6 +17,15 @@
         </li>
       </ul>
     </div>
+    {% if request.user.is_superuser %}
+      <div class="menu_section">
+        <h3>Admin</h3>
+        <ul class="nav side-menu">
+          <li><a href="/notices/"><i class="fa fa-files-o"></i>Notices</a>
+          </li>
+        </ul>
+      </div>
+    {% endif %}
   </div>
   <!-- /sidebar menu -->
 

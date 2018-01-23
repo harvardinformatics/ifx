@@ -33,14 +33,16 @@ Page for displaying a list of Notices, most recent first
         {% for notice in notices %}
           <div class="x_panel">
             <div class="x_title">
-              <h2>{{notice.author}} Created: {{notice.created}}, Updated: {{notice.updated}}</h2>
+              <h2>{{notice.title}}</h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
-                  <li><a href=""><i class="fa pencil-square-o"></i></a>
-                  </li>
-                  <li><a href=""><i class="fa trash-o"></i></a>
-                  </li>
+                  {% if request.user.is_superuser %}
+                    <li><a href="{% url 'edit_notice' pk=notice.id %}"><i class="fa fa-pencil-square-o"></i></a>
+                    </li>
+                    <li><a href="{% url 'delete_notice' pk=notice.id %}"><i class="fa fa-trash-o"></i></a>
+                    </li>
+                  {% endif %}
                   <li><a class="close-link"><i class="fa fa-close"></i></a>
                   </li>
                 </ul>
@@ -49,6 +51,9 @@ Page for displaying a list of Notices, most recent first
             <div class="x_content">
               <div class="dashboard-widget-content">
                 <p>{{notice.content|markdown}}</p>
+              </div>
+              <div class="dashboard-widget-content">
+                <p>Author: {{notice.author}} Created: {{notice.created}}, Updated: {{notice.updated}}</p>
               </div>
             </div>
           </div>

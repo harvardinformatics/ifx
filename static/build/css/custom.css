@@ -1372,7 +1372,8 @@ table.jambo_table tbody tr.selected td {
 }
 .dataTables_length {
     width: 40%;
-    float: left
+    float: left;
+    margin-top: 1em;
 }
 .dataTables_filter {
     width: 50%;

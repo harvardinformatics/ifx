@@ -3,7 +3,8 @@ from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.exceptions import ImproperlyConfigured
 from rc.ad import Connection
 from rc.ad import user as ADUser
-import logging
+import logging, os
+from ifx.settings import AD_ADMIN_GROUPS, DEBUG
 
 
 logger = logging.getLogger("ifx")
@@ -27,8 +28,15 @@ def updateUserInfo(user):
                 user.last_name = us[0][1]["sn"][0]
 
             # If the user is rc_admin or informatics, they are an admin here
-            if ADUser.hasGroups(conn, user.username, ["rc_admin","informatics"]):
+            if ADUser.hasGroups(conn, user.username, AD_ADMIN_GROUPS):
                 user.is_superuser = True
+            else:
+                user.is_superuser = False
+
+            # if ADUser.isEnabled(conn, user.username):
+            #     user.is_active = True
+            # else:
+            #     user.is_active = False
 
             user.save()
 
@@ -68,7 +76,10 @@ class RemoteUserPlusMiddleware(RemoteUserMiddleware):
                 " before the RemoteUserMiddleware class.")
         try:
             logger.debug("Checking header for REMOTE_USER")
-            username = request.META[self.header]
+            if DEBUG and os.environ.get("IFX_REMOTE_USER"):
+                username = os.environ.get("IFX_REMOTE_USER").strip()
+            else:
+                username = request.META[self.header]
         except KeyError:
             # If specified header doesn't exist then remove any existing
             # authenticated remote-user, or return (leaving request.user set to

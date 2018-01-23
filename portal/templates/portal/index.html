@@ -1,4 +1,5 @@
 {% extends "portal/base_site.html" %}
+{% load markdown_deux_tags %}
 
 {% block title %} Home {% endblock title %}
 
@@ -44,20 +45,27 @@
           <div class="x_content">
             <div class="dashboard-widget-content">
               <ul class="list-unstyled timeline widget">
+                {% for notice in notices %}
                 <li>
                   <div class="block">
                     <div class="block_content">
                       <h2 class="title">
-                        <a>The CentOS 7 migration will change your applications</a>
+                        <a href="{% url 'view_notice' pk=notice.id %}">{{notice.title}}</a>
                       </h2>
                       <div class="byline">
-                        <span>13 hours ago</span> by <a>Aaron Kitzmiller</a>
+                        <span>{{notice.updated}}</span> by <a>{{notice.author}}</a>
                       </div>
-                      <p class="excerpt">Research Computing will be moving the Odyssey cluster to CentOS 7.  While many applications will be migrated to the Odyssey 3 module system, there will be important differences... <a>Read&nbsp;More</a>
+                      <p class="excerpt">
+                        {% if notice.excerpt %}
+                          {{notice.excerpt|markdown}}...<a href="{% url 'view_notice' pk=notice.id %}">Read&nbsp;More</a>
+                        {% else %}
+                          {{notice.content|markdown}}
+                        {% endif %}
                       </p>
                     </div>
                   </div>
                 </li>
+                {% endfor %}
               </ul>
             </div>
           </div>
@@ -102,19 +110,6 @@
 
 {% block javascripts %}
   {{ block.super}}
-  <script src="/static/vendors/DateJS/build/date.js"></script>
-  <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-  <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-  <script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-  <script src="/static/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-  <script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-  <script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-  <script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       /** Data table setup **/

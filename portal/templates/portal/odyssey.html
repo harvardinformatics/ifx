@@ -1,14 +1,9 @@
 {% extends "portal/base_site.html" %}
 
-{% block title %} Home {% endblock title %}
+{% block title %} Odyssey {% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
-  <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 {% endblock stylesheets %}
 
 {% block content %}
@@ -56,26 +51,17 @@
 
 {% block javascripts %}
   {{ block.super}}
-  <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-  <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-  <script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-  <script src="/static/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-  <script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-  <script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-  <script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
   <script type="text/javascript">
     (function($) {
         $(document).ready(function(){
             console.log("Setting up joblist table");
             var table = $("#joblist-table").DataTable({
     /*            "oSearch" : {"sSearch": getParameterByName('search')}, */
-                "dom"  : "lifrtp",
-                "ajax" : PORTAL_URL + "jobs/api?username=cgorgulla",
+                "language": {
+                  "emptyTable": "No jobs currently in the queue"
+                },
+                "dom"  : "iflrtp",
+                "ajax" : PORTAL_URL + "jobs/api?username=" + USERNAME,
                 "columns" : [
                     {"title" : "Job Id",      "data" : "jobid"},
                     {"title" : "Job Name",    "data" : "name",      "render" : clipcell},
@@ -90,6 +76,7 @@
                 "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ]        });
             
             $(".dataTables_filter").css({"float":"right","margin-right" : "2em", "margin-bottom" : "0.5em"});
+
 
            //Reload the table and get the most recent table update date
             setInterval( function () { 
