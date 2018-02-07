@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("DJANGO_KEY", '8*md2t)o**67@*yhc(d=f@j95kl(dnf^rmm4s00$-mh_vurb2b')
+SECRET_KEY      = os.environ.get("DJANGO_KEY", '8*md2t)o**67@*yhc(d=f@j95kl(dnf^rmm4s00$-mh_vurb2b')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG           = os.environ.get("DJANGO_DEBUG") == "TRUE"
@@ -149,12 +149,22 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
     },
+    'formatters': {
+        'console': {
+            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+        },
+    },
     'loggers': {
         '': {
             'handlers': ['console'],
             'level': 'WARNING',
         },
         'ifx': {
+            'handlers': ['console'],
+            'level': LOGLEVEL,
+            'propagate': False,
+        },
+        'portal': {
             'handlers': ['console'],
             'level': LOGLEVEL,
             'propagate': False,

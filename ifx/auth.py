@@ -7,7 +7,7 @@ import logging, os
 from ifx.settings import AD_ADMIN_GROUPS, DEBUG
 
 
-logger = logging.getLogger("ifx")
+logger = logging.getLogger(__name__)
 
 
 def updateUserInfo(user):

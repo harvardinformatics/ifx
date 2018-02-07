@@ -30,14 +30,14 @@ RUN pip install -r requirements.txt && \
     pip install gunicorn
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf 
-COPY etc/nginx-dev.conf /etc/nginx/sites-available/default
+COPY etc/nginx.conf /etc/nginx/sites-available/default
 COPY etc/supervisor.conf /etc/supervisor/conf.d/app.conf
 ENV DJANGO_SETTINGS_FILE=settings
 
 ENV PYTHONPATH=/app
 
-# Set Django setting DEBUG to True
-ENV DJANGO_DEBUG=TRUE
-ENV DJANGO_LOGLEVEL=DEBUG
+# Set Django setting DEBUG to False
+ENV DJANGO_DEBUG=FALSE
+ENV DJANGO_LOGLEVEL=INFO
 
 CMD ["/usr/bin/supervisord","-n"]
