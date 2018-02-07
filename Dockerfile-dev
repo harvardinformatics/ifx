@@ -36,4 +36,7 @@ ENV DJANGO_SETTINGS_FILE=settings
 
 ENV PYTHONPATH=/app
 
+# Set Django setting DEBUG to True
+ENV DJANGO_DEBUG=TRUE
+
 CMD ["/usr/bin/supervisord","-n"]

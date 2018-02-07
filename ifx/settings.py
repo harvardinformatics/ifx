@@ -20,13 +20,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("IFX_DJANGO_KEY", '8*md2t)o**67@*yhc(d=f@j95kl(dnf^rmm4s00$-mh_vurb2b')
+SECRET_KEY = os.environ.get("DJANGO_KEY", '8*md2t)o**67@*yhc(d=f@j95kl(dnf^rmm4s00$-mh_vurb2b')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG           = os.environ.get("DJANGO_DEBUG") == "TRUE"
+LOGLEVEL        = os.environ.get("DJANGO_LOGLEVEL", "INFO").upper()
+ALLOWED_HOSTS   = os.environ.get("DJANGO_ALLOWED_HOSTS","").split(",")
 
-ALLOWED_HOSTS = []
-
+ADMINSTR        = os.environ.get("DJANGO_ADMINS", "Aaron,akitzmiller@g.harvard.edu;ajk,aaron.kitzmiller@gmail.com")
+ADMINS = []
+for admins in ADMINSTR.split(";"):
+    ADMINS.append((admins.split(",")[0], admins.split(",")[1]))
 
 # Application definition
 
@@ -141,30 +145,19 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'debugfile': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': '/var/log/ifx-debug.log',
-        },
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': '/var/log/ifx.log',
-        },
         'console': {
             'class': 'logging.StreamHandler',
         },
     },
     'loggers': {
-        'django': {
-            'handlers': ['debugfile', 'console'],
-            'level': 'DEBUG',
-            'propagate': True,
+        '': {
+            'handlers': ['console'],
+            'level': 'WARNING',
         },
         'ifx': {
-            'handlers': ['debugfile', 'console'],
-            'level': 'DEBUG',
-            'propagate': True,
+            'handlers': ['console'],
+            'level': LOGLEVEL,
+            'propagate': False,
         },
     },
 }
