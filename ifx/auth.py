@@ -80,6 +80,7 @@ class RemoteUserPlusMiddleware(RemoteUserMiddleware):
                 username = os.environ.get("IFX_REMOTE_USER").strip()
             else:
                 username = request.META[self.header]
+            logger.debug("User %s logged in" % username)
         except KeyError:
             # If specified header doesn't exist then remove any existing
             # authenticated remote-user, or return (leaving request.user set to
