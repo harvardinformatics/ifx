@@ -30,7 +30,7 @@ RUN pip install -r requirements.txt && \
     pip install gunicorn
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf 
-COPY etc/nginx-dev.conf /etc/nginx/sites-available/default
+COPY etc/nginx.conf /etc/nginx/sites-available/default
 COPY etc/supervisor.conf /etc/supervisor/conf.d/app.conf
 ENV DJANGO_SETTINGS_FILE=settings
 

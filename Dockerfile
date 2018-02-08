@@ -1,7 +1,10 @@
 #
 # Dockerfile for the ifx.rc portal application
 #
-# Use a volume to deploy code to /app
+# COPYs code to /apps
+# db.sqlite3 must come from the host (e.g. -v /var/www/html/db.sqlite3:/app/db.sqlite3)
+# If migrations must be applied, pull the latest container and run manage.py migrate as the entrypoint
+#
 
 FROM debian
 
@@ -23,8 +26,7 @@ RUN apt-get update -y && apt-get install -y \
 
 
 WORKDIR /app
-
-ADD requirements.txt /app/requirements.txt
+COPY requirements.txt .
 RUN pip install -r requirements.txt && \
     pip install git+https://gitlab-int.rc.fas.harvard.edu/common/rcpy.git && \
     pip install gunicorn
@@ -32,12 +34,10 @@ RUN pip install -r requirements.txt && \
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf 
 COPY etc/nginx.conf /etc/nginx/sites-available/default
 COPY etc/supervisor.conf /etc/supervisor/conf.d/app.conf
+
+COPY . /app
+
 ENV DJANGO_SETTINGS_FILE=settings
-
 ENV PYTHONPATH=/app
-
-# Set Django setting DEBUG to False
-ENV DJANGO_DEBUG=FALSE
-ENV DJANGO_LOGLEVEL=INFO
 
 CMD ["/usr/bin/supervisord","-n"]
