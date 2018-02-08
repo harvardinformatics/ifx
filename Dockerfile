@@ -22,6 +22,7 @@ RUN apt-get update -y && apt-get install -y \
     python-ldap \
     python-mysqldb \
     nginx \
+    sendmail \
     supervisor 
 
 

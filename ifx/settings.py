@@ -143,7 +143,7 @@ STATICFILES_DIRS = [
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'formatters': {
         'console': {
             'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
