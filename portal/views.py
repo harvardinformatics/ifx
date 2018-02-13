@@ -96,10 +96,11 @@ def delete_notice(request, pk):
                 notice = Notice.objects.get(pk=pk)
                 return render(request, "portal/delete_notice.html", {"notice" : notice})
             except Notice.DoesNotExist:
-                 raise Http404("Notice %s cannot be found" % str(pk))
+                raise Http404("Notice %s cannot be found" % str(pk))
     except Exception as e:
         logger.exception("Error deleting Notice %s" % str(pk))
         return render(request, "portal/delete_notice.html", {"error_message" : "Error deleting Notice %s: %s" % (str(pk), str(e))})
+
 
 def gentella_html(request):
     context = {}

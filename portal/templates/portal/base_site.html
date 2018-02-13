@@ -88,19 +88,14 @@
                       </ul>
                     </li>
                     {% endif %}
-                    {% if not request.user.is_authenticated %}
-                     <li>
-                      <a href="/login/" title="Login" aria-expanded="false">
-                        <img src="/static/images/login.png" width="30px"/>
-                      </a>
-                    </li>
-                    {% endif %}
+                    {% if request.user|rcusername %}
                     <li>
                       <a href="/odyssey/" title="Slurm jobs" class="info-number hidden-xs" aria-expanded="false">
                         <img src="/static/images/slurm-logo.png" width="50px"/>
                         <span id="odyssey-badge" class="badge bg-red">0</span>
                       </a>
                     </li>
+                    {% endif %}
                    </ul>
                 </nav>
               </div>

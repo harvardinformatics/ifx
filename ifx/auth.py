@@ -30,8 +30,7 @@ def updateRCAccountInfo(user):
 
         # If not, make a new one
         if rcusername is None:
-            rcusername = user.username.split('@',1)[0]
-
+            rcusername = user.username.split('@', 1)[0]
 
         conn = Connection()
         us = conn.search(sAMAccountName=rcusername)
@@ -56,7 +55,7 @@ def updateRCAccountInfo(user):
             #     user.is_active = False
 
             if rcaccount is None:
-                rcaccount = Account(name="RC", identifier=rcusername)
+                rcaccount = Account(name="RC", identifier=rcusername, user=user)
                 rcaccount.save()
 
             user.save()

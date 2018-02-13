@@ -1,3 +1,5 @@
+{% load portaltags %}
+
 <div class="left_col scroll-view">
   <div class="navbar nav_title" style="border: 0;">
     <a href="/" class="site_title"><img src="/static/images/informatics-logo-icon-inverted.png"/><span>ifx.rc</span></a>
@@ -9,8 +11,10 @@
     <div class="menu_section">
       <h3>Applications</h3>
       <ul class="nav side-menu">
+        {% if request.user|rcusername %}
         <li><a href="/odyssey/"><img src="/static/images/slurm-logo.png" width="40px"/>Odyssey</a>
         </li>
+        {% endif %}
         <li><a href="/lipidx/lipid_analysis/"><i class="fa fa-gear"></i>lipidx</a>
         </li>
         <li><a href="/DimaApp/"><i class="fa fa-gear"></i>DimaApp</a>
