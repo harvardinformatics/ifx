@@ -44,7 +44,7 @@ def updateRCAccountInfo(user):
                 user.last_name = us[0][1]["sn"][0]
 
             # If the user is rc_admin or informatics, they are an admin here
-            if ADUser.hasGroups(conn, user.username, AD_ADMIN_GROUPS):
+            if ADUser.hasGroups(conn, rcusername, AD_ADMIN_GROUPS):
                 user.is_superuser = True
             else:
                 user.is_superuser = False
