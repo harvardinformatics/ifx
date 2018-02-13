@@ -82,7 +82,7 @@ class RemoteUserPlusMiddleware(RemoteUserMiddleware):
     # Name of request header to grab username from.  This will be the key as
     # used in the request.META dictionary, i.e. the normalization of headers to
     # all uppercase and the addition of "HTTP_" prefix apply.
-    header = "HTTP_X_REMOTE_USER"
+    header = "HTTP_HKEYMAIL"
     force_logout_if_no_header = True
 
     def process_request(self, request):
@@ -101,6 +101,9 @@ class RemoteUserPlusMiddleware(RemoteUserMiddleware):
             else:
                 username = request.META[self.header]
             logger.debug("User %s logged in" % username)
+            for k, v in request.META.iteritems():
+                if 'HKEY' in k:
+                    logger.debug("%s = %s" % (k, v))
         except KeyError:
             # If specified header doesn't exist then remove any existing
             # authenticated remote-user, or return (leaving request.user set to
