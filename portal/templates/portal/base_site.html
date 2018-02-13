@@ -1,4 +1,5 @@
 {% load gravatar %}
+{% load portaltags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -42,6 +43,7 @@
       <script type="text/javascript">
         var PORTAL_URL = "https://portal.rc.fas.harvard.edu/";
         var USERNAME = "{{request.user.username}}";
+        var RCUSERNAME = "{{request.user|rcusername}}"
       </script>
     {% endblock head %}
   </head>

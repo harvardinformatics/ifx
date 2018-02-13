@@ -5,10 +5,10 @@ from django.contrib.auth.models import User
 
 
 class Notice(models.Model):
-    '''
+    """
     Meta data for an access to resources or actions or services.  Used to help setup the web page listing existing grants 
     and those that you can ask for.
-    '''
+    """
     class Meta:
         db_table = "notice"
 
@@ -18,3 +18,16 @@ class Notice(models.Model):
     author              = models.ForeignKey(User, blank=False, null=False, help_text="Author of the article")
     created             = models.DateTimeField(auto_now_add=True, help_text="When the Notice was created.")
     updated             = models.DateTimeField(auto_now=True, help_text="Last update date")
+
+
+class Account(models.Model):
+    """
+    Model for accounts linked to the user.  Probably will just be RC
+    """
+    class Meta:
+        db_table = "account"
+
+    name                = models.CharField(blank=False, null=False, max_length=100, help_text="Name of the account")
+    identifier          = models.CharField(blank=False, null=False, max_length=100, help_text="User identifier used for thsi account")    
+    user                = models.ForeignKey(User, blank=False, null=False, help_text="User associated with this account.")
+    

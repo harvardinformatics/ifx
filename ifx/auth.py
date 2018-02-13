@@ -5,19 +5,36 @@ from rc.ad import Connection
 from rc.ad import user as ADUser
 import logging, os
 from ifx.settings import AD_ADMIN_GROUPS, DEBUG
+from portal.models import Account
 
 
 logger = logging.getLogger(__name__)
 
 
-def updateUserInfo(user):
+def updateRCAccountInfo(user):
     """
     Fetch data from AD and update local bits
     """
     logger.debug("Searching AD...")
     try:
+
+        # Determine the RC username
+        rcusername = None
+        rcaccount = None
+        # If the account record exists, check it
+        try:
+            rcaccount = Account.objects.get(user=user)
+            rcusername = rcaccount.identifier
+        except Account.DoesNotExist:
+            pass
+
+        # If not, make a new one
+        if rcusername is None:
+            rcusername = user.username.split('@',1)[0]
+
+
         conn = Connection()
-        us = conn.search(sAMAccountName=user.username)
+        us = conn.search(sAMAccountName=rcusername)
         if len(us) > 0:
             logger.debug("Found AD user.  Updating settings")
             if "mail" in us[0][1]:
@@ -37,6 +54,10 @@ def updateUserInfo(user):
             #     user.is_active = True
             # else:
             #     user.is_active = False
+
+            if rcaccount is None:
+                rcaccount = Account(name="RC", identifier=rcusername)
+                rcaccount.save()
 
             user.save()
 
@@ -112,5 +133,5 @@ class RemoteUserPlusMiddleware(RemoteUserMiddleware):
             request.user = user
             auth.login(request, user)
             
-            updateUserInfo(user)
+            updateRCAccountInfo(user)
 

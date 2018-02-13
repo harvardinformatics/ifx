@@ -1897,7 +1897,7 @@ function init_DataTables() {
 // Get the users current squeue job count
 function getJobCount(username){
     if (username){
-        url = PORTAL_URL + "/jobs/jobcount?username=" + username;
+        url = PORTAL_URL + "/jobs/jobcount?username=" + 'snirgaz';
         $.getJSON(url, function(data){
           $("#odyssey-badge").html(data.jobcount);
         });
@@ -1930,9 +1930,9 @@ $(document).ready(function() {
     init_autocomplete();
 
     //Hopefully, username was set in a template
-    getJobCount(USERNAME);
+    getJobCount(RCUSERNAME);
     setInterval( function () { 
-        getJobCount(USERNAME);
+        getJobCount(RCUSERNAME);
     }, 5000 );
 
 });
