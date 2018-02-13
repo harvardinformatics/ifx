@@ -29,4 +29,4 @@ class Account(models.Model):
 
     name                = models.CharField(blank=False, null=False, max_length=100, help_text="Name of the account")
     identifier          = models.CharField(blank=False, null=False, max_length=100, help_text="User identifier used for thsi account")    
-    user                = models.ForeignKey(User, blank=False, null=False, help_text="User associated with this account.")
+    user                = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE, help_text="User associated with this account.")

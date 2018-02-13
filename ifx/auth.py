@@ -11,6 +11,17 @@ from portal.models import Account
 logger = logging.getLogger(__name__)
 
 
+def updateHarvardAccountInfo(user, huid):
+    """
+    Create a Harvard account record
+    """
+    try:
+        harvardaccount = Account.objects.get(user=user, name="Harvard")
+    except Account.DoesNotExist:
+        harvardaccount = Account(user=user, name="Harvard", identifier=huid)
+        harvardaccount.save()
+
+
 def updateRCAccountInfo(user):
     """
     Fetch data from AD and update local bits
@@ -23,7 +34,7 @@ def updateRCAccountInfo(user):
         rcaccount = None
         # If the account record exists, check it
         try:
-            rcaccount = Account.objects.get(user=user)
+            rcaccount = Account.objects.get(user=user, name="RC")
             rcusername = rcaccount.identifier
         except Account.DoesNotExist:
             pass
@@ -44,6 +55,7 @@ def updateRCAccountInfo(user):
                 user.last_name = us[0][1]["sn"][0]
 
             # If the user is rc_admin or informatics, they are an admin here
+            logger.debug("User groups\n%s\n" % "\n".join(us[0][1]['memberOf']))
             if ADUser.hasGroups(conn, rcusername, AD_ADMIN_GROUPS):
                 user.is_superuser = True
             else:
@@ -83,6 +95,7 @@ class RemoteUserPlusMiddleware(RemoteUserMiddleware):
     # used in the request.META dictionary, i.e. the normalization of headers to
     # all uppercase and the addition of "HTTP_" prefix apply.
     header = "HTTP_HKEYMAIL"
+    huid_header = "HTTP_X_REMOTE_USER"
     force_logout_if_no_header = True
 
     def process_request(self, request):
@@ -97,9 +110,11 @@ class RemoteUserPlusMiddleware(RemoteUserMiddleware):
         try:
             logger.debug("Checking header for REMOTE_USER")
             if DEBUG and os.environ.get("IFX_REMOTE_USER"):
-                username = os.environ.get("IFX_REMOTE_USER").strip()
+                username    = os.environ.get("IFX_REMOTE_USER").strip()
+                huid        = os.environ.get("IFX_HUID").strip()
             else:
-                username = request.META[self.header]
+                username    = request.META[self.header]
+                huid        = request.META[self.huid_header]
             logger.debug("User %s logged in" % username)
             for k, v in request.META.iteritems():
                 if 'HKEY' in k:
@@ -134,6 +149,5 @@ class RemoteUserPlusMiddleware(RemoteUserMiddleware):
             # by logging the user in.
             request.user = user
             auth.login(request, user)
-            
+            updateHarvardAccountInfo(user, huid)
             updateRCAccountInfo(user)
-
