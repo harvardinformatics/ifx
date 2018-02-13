@@ -1897,7 +1897,7 @@ function init_DataTables() {
 // Get the users current squeue job count
 function getJobCount(username){
     if (username){
-        url = PORTAL_URL + "/jobs/jobcount?username=" + 'snirgaz';
+        url = PORTAL_URL + "/jobs/jobcount?username=" + RCUSERNAME;
         $.getJSON(url, function(data){
           $("#odyssey-badge").html(data.jobcount);
         });
