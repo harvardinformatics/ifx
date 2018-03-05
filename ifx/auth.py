@@ -149,5 +149,7 @@ class RemoteUserPlusMiddleware(RemoteUserMiddleware):
             # by logging the user in.
             request.user = user
             auth.login(request, user)
+
+            
             updateHarvardAccountInfo(user, huid)
             updateRCAccountInfo(user)
