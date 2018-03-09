@@ -29,6 +29,15 @@ html , body{
     position: relative;
     float: left;
 }
+
+.notice {
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.notice p {
+    margin-left: 10px;
+}
 .daterangepicker .ranges li {
     color: #73879C
 }
