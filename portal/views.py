@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from portal.models import Notice
 from portal.forms import NoticeForm
@@ -20,6 +19,10 @@ def index(request):
 # @login_required(login_url="/login")
 def odyssey(request):
     return render(request, "portal/odyssey.html", {"settings" : settings})
+
+
+def odyssey_migration(request):
+    return render(request, "portal/odyssey_migration.html")
 
 
 # @login_required(login_url="/login")

@@ -6,6 +6,7 @@ urlpatterns = [
     # Matches any html file - to be used for gentella
     # Avoid using your .html in your resources.
     # Or create a separate django app.
+    url(r'^odyssey/migration/', views.odyssey_migration, name="odyssey_migration"),
     url(r'^odyssey/', views.odyssey, name="odyssey"),
     url(r'^notices/new/', views.edit_notice, name="new_notice"),
     url(r'^notices/edit/(?P<pk>\d+)/', views.edit_notice, name="edit_notice"),

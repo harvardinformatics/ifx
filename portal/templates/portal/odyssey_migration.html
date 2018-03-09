@@ -1,0 +1,61 @@
+{% extends "portal/base_site.html" %}
+
+{% block title %} Odyssey {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Informatics applications to be migrated to Odyssey 3 (CentOS 7)</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <div class="dashboard-widget-content">
+              <div class="application-list-container">
+                  <table id="module-list-table" class="table dt-responsive" cellspacing="0" width="100%">
+                    <thead>
+                      <tr>
+                        <th>Application</th>
+                        <th>Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+{% endblock content %}
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      /** Data table setup **/
+      var renderfun = function(data, type, row, meta){ return "data"; }
+      $("#module-list-table").DataTable({
+          "ajax" : {
+              "url" : PORTAL_URL + "apps/moduledata?app-tag=o3-migration:yes&data=yes",
+          },
+          "order" : [], 
+          "paging" : false,
+          "dom"  : "ft",
+          "columns" : [
+              {"title" : "Application", "data" : "app_name" },
+              {"title" : "Description", "data" : "description" },
+          ],
+      });
+    })
+  </script>
+{% endblock javascripts %}
