@@ -38,6 +38,9 @@ html , body{
 .notice p {
     margin-left: 10px;
 }
+.notice pre {
+    margin-left: 10px;
+}
 .daterangepicker .ranges li {
     color: #73879C
 }
