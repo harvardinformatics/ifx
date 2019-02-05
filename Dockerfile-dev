@@ -26,7 +26,8 @@ RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-COPY etc/nginx.conf /etc/nginx/sites-available/default
+COPY etc/nginx-dev.conf /etc/nginx/sites-available/default
+COPY etc/htpasswd   /etc/nginx/htpasswd
 COPY etc/supervisor.conf /etc/supervisor/conf.d/app.conf
 ENV DJANGO_SETTINGS_FILE=settings
 

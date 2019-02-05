@@ -26,8 +26,8 @@ DEBUG           = os.environ.get("DJANGO_DEBUG") == "TRUE"
 LOGLEVEL        = os.environ.get("DJANGO_LOGLEVEL", "INFO").upper()
 # App name and token
 IFX_APP = {
-    'token' : os.environ.get('NICE_IFX_APP_TOKEN', 'aslkdfjadfsfsd'),
-    'name': 'nice',
+    'token' : os.environ.get('IFX_IFX_APP_TOKEN', 'aslkdfjadfsfsd'),
+    'name': 'ifx',
 }
 IFX_AUTH_META_KEY = 'HTTP_HKEY_EDUPERSONPRINCIPALNAME'
 
@@ -142,11 +142,7 @@ SITE_ID = 2
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    '/var/www/static/',
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 LOGGING = {
     'version': 1,
