@@ -21,11 +21,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY      = os.environ.get("DJANGO_KEY", '8*md2t)o**67@*yhc(d=f@j95kl(dnf^rmm4s00$-mh_vurb2b')
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG           = os.environ.get("DJANGO_DEBUG") == "TRUE"
 LOGLEVEL        = os.environ.get("DJANGO_LOGLEVEL", "INFO").upper()
-ALLOWED_HOSTS   = os.environ.get("DJANGO_ALLOWED_HOSTS","").split(",")
+# App name and token
+IFX_APP = {
+    'token' : os.environ.get('NICE_IFX_APP_TOKEN', 'aslkdfjadfsfsd'),
+    'name': 'nice',
+}
+IFX_AUTH_META_KEY = 'HTTP_HKEY_EDUPERSONPRINCIPALNAME'
+
+ALLOWED_HOSTS = ['localhost']
 
 ADMINSTR        = os.environ.get("DJANGO_ADMINS", "Aaron,akitzmiller@g.harvard.edu;ajk,aaron.kitzmiller@gmail.com")
 ADMINS = []
@@ -45,6 +51,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'markdown_deux',
+    'ifxauth',
+    'ifxuser',
     'portal',
 ]
 
@@ -54,7 +62,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'ifx.auth.RemoteUserPlusMiddleware',
+    'ifxauth.auth.IfxRemoteUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
@@ -93,8 +101,7 @@ DATABASES = {
 
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.RemoteUserBackend',
-    'django.contrib.auth.backends.ModelBackend'
+    'ifxauth.auth.IfxRemoteUserBackend',
 ]
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -153,6 +160,7 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'console',
+            'level': LOGLEVEL,
          },
     },
     'loggers': {
@@ -177,3 +185,5 @@ PORTAL_URL = "https://portal.rc.fas.harvard.edu/"
 
 # Used by ifx.auth to determine is_superuser flag
 AD_ADMIN_GROUPS = ["rc_admin", "informatics"]
+
+AUTH_USER_MODEL = 'ifxuser.IfxUser'

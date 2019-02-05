@@ -2,7 +2,7 @@
 forms for Portal applications
 """
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.forms import ModelChoiceField
 from portal.models import Notice
 
@@ -27,19 +27,19 @@ class NoticeForm(forms.ModelForm):
     content     = forms.CharField(
         widget=forms.Textarea(
             attrs={
-                "rows"          : 10, 
+                "rows"          : 10,
                 "class"         : "resizable_textarea form-control",
                 "placeholder"   : "Use Markdown for styling",
             }
-        ), 
+        ),
         required=True)
     excerpt     = forms.CharField(
         widget=forms.Textarea(
             attrs={
-                "rows"          : 10, 
+                "rows"          : 10,
                 "class"         : "resizable_textarea form-control",
                 "placeholder"   : "Excerpt for the front page, if the notice is long.  Markdown works here.",
             }
-        ), 
+        ),
         required=True)
-    author      = UserChoiceField(queryset=User.objects.all(), required=True, empty_label=None)
+    author      = UserChoiceField(queryset=get_user_model().objects.all(), required=True, empty_label=None)

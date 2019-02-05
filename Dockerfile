@@ -6,33 +6,28 @@
 # If migrations must be applied, pull the latest container and run manage.py migrate as the entrypoint
 #
 
-FROM debian
+FROM python:3.6
 
-EXPOSE 80
 RUN apt-get update -y && apt-get install -y \
     git \
     gcc \
     procps \
     vim \
-    mariadb-client-10.1 \
-    libmariadbclient-dev-compat \
-    python \
-    python-dev \
-    python-pip \
-    python-ldap \
-    python-mysqldb \
     nginx \
     sendmail \
-    supervisor 
+    supervisor
 
 
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install -r requirements.txt && \
-    pip install git+https://gitlab-int.rc.fas.harvard.edu/common/rcpy.git && \
-    pip install gunicorn
+RUN pip install --upgrade pip && \
+    pip install gunicorn && \
+    pip install git+https://github.com/harvardinformatics/ifxurls.git && \
+    pip install git+https://github.com/harvardinformatics/ifxauth.git && \
+    pip install git+https://github.com/harvardinformatics/ifxuser.git && \
+    pip install -r requirements.txt
 
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf 
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 COPY etc/nginx.conf /etc/nginx/sites-available/default
 COPY etc/supervisor.conf /etc/supervisor/conf.d/app.conf
 

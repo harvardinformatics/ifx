@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.contrib.flatpages import views as v
 from portal import views
+from portal.admin import admin_site as admin
 
 urlpatterns = [
     # Matches any html file - to be used for gentella

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from portal.models import Notice
 from portal.forms import NoticeForm
 from ifx import settings
@@ -35,14 +35,14 @@ def notices(request, pk=None):
         if pk is None:
             notices = Notice.objects.all().order_by("-updated")
         else:
-            try: 
+            try:
                 notices = Notice.objects.filter(id=int(pk))
             except Notice.DoesNotExist:
                 raise Http404("Notice %s cannot be found" % str(pk))
         context["notices"] = notices
     except Exception as e:
         context["error_message"] = "There was a system error retrieving the list of notices: %s" % str(e)
-    
+
     return render(request, "portal/notices.html", context)
 
 
