@@ -20,6 +20,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN --mount=type=ssh pip install --upgrade pip && \
     pip install gunicorn && \
+    pip install 'Django>2.2,<3' && \
     pip install git+ssh://git@github.com/harvardinformatics/ifxurls.git@${IFXURLS_COMMIT} && \
     pip install git+ssh://git@github.com/harvardinformatics/nanites.client.git@${NANITES_CLIENT_COMMIT} && \
     pip install git+ssh://git@github.com/harvardinformatics/ifxuser.git@${IFXUSER_COMMIT} && \
