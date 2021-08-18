@@ -8,19 +8,6 @@
   <div class="clearfix"></div>
   <!-- sidebar menu -->
   <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-    <div class="menu_section">
-      <h3>Applications</h3>
-      <ul class="nav side-menu">
-        {% if request.user|rcusername %}
-        <li><a href="/odyssey/"><img src="/static/images/slurm-logo.png" width="40px"/>Odyssey</a>
-        </li>
-        {% endif %}
-        <li><a href="/lipidx/lipid_analysis/"><i class="fa fa-gear"></i>lipidx</a>
-        </li>
-        <li><a href="/DimaApp/"><i class="fa fa-gear"></i>DimaApp</a>
-        </li>
-      </ul>
-    </div>
     {% if request.user.is_superuser %}
       <div class="menu_section">
         <h3>Admin</h3>
