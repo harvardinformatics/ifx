@@ -1,0 +1,26 @@
+version: '3'
+services:
+  ifx:
+    build: .
+    ports: 
+      - 8086:80
+    volumes:
+      - .:/app
+    depends_on:
+      - nanites
+  nanites:
+    image: harvardinformatics/nanites:latest
+    environment:
+      - NANITES_LOGLEVEL
+      - NANITES_DEBUG
+      - NANITES_USERNAME=nanites
+      - NANITES_PASSWORD
+      - NANITES_DATABASE=nanites
+      - NANITES_HOSTNAME=nanites-db
+  nanites-db:
+    image: mariadb
+    environment:
+      - MYSQL_USER=nanites
+      - MYSQL_DATABASE=nanites
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_PASSWORD
